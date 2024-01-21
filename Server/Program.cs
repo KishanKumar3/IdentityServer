@@ -20,6 +20,13 @@ if (seed)
 {
     SeedData.EnsureSeedData(defaultConnString);
 }
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 
 builder.Services.AddDbContext<AspNetIdentityDbContext>(options =>
     options.UseSqlServer(defaultConnString,
@@ -41,6 +48,13 @@ builder.Services.AddIdentityServer()
         b.UseSqlServer(defaultConnString, opt => opt.MigrationsAssembly(assembly));
     })
     .AddDeveloperSigningCredential();
+
+builder.Services.AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://localhost:5001";
+                options.Audience = "api1";
+            });
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "AmCart";
@@ -67,10 +81,24 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 
 var app = builder.Build();
+app.UseCors("AllowSpecificOrigin");
 app.UseForwardedHeaders();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseHsts();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+        context.Response.StatusCode = 200;
+    }
+    else
+    {
+        await next();
+    }
+});
 app.UseCookiePolicy(new CookiePolicyOptions
 
 {
@@ -83,6 +111,7 @@ app.UseCookiePolicy(new CookiePolicyOptions
 
 });
 app.UseIdentityServer();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
