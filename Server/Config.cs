@@ -2,8 +2,8 @@
 
 namespace Server
 {
-	public class Config
-	{
+    public class Config
+    {
         public static IEnumerable<IdentityResource> IdentityResources =>
             new[]
             {
@@ -47,7 +47,7 @@ namespace Server
                     ClientId = "interactive",
                     ClientSecrets = { new Secret("ClientSecret1".Sha256()) },
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = { "https://localhost:4200/singin-oidc"}, 
+                    RedirectUris = { "https://localhost:4200/signin-oidc" },
                     FrontChannelLogoutUri = "https://localhost:4200/signout-oidc",
                     PostLogoutRedirectUris = { "https://localhost:4200/signout-callback-oidc" },
                     AllowOfflineAccess = true,
@@ -55,7 +55,10 @@ namespace Server
                     RequireClientSecret = false,
                     RequirePkce = true,
                     RequireConsent = true,
-                    AllowPlainTextPkce = false
+                    AllowPlainTextPkce = false,
+                    RequireClientSecret = false,
+                    AllowedCorsOrigins={ "https://localhost:4200"}
+
                 },
             };
     }
