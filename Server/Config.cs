@@ -56,7 +56,6 @@ namespace Server
                     RequirePkce = true,
                     RequireConsent = true,
                     AllowPlainTextPkce = false,
-                    RequireClientSecret = false,
                     AllowedCorsOrigins={ "https://localhost:4200"}
 
                 },
