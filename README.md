@@ -1,2 +1,2 @@
 # IdentityServer
-A project that can be used for integrating ASP.NET Identity with IdentityServer 4
+It is a solution to develop centralized standalone Authentication Server and Identity Provider with implementing IdentityServer4 package and the name of microservice is Identity Server. Identity Server4 is an open source framework which implements OpenId Connect and OAuth2 protocols for .Net Core. With Identity Server, we can provide authentication and access control for our web applications or Web APIs from a single point between applications or on a user basis.
